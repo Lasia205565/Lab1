@@ -22,26 +22,59 @@ import com.mxgraph.layout.*;
 import com.mxgraph.swing.*;
 
 //show the graph
+/**
+* @parameter
+* @since
+* @return
+*/
 public class GraphVisualization
-    extends JApplet implements ActionListener
-{
+    extends JApplet implements ActionListener {
     private static final long serialVersionUID = 2202072534703043194L;
     //the Dimension of the frame
+    /**
+    * @parameter
+    * @since
+    * @return
+    */
     private static final Dimension DEFAULT_SIZE = new Dimension(800, 600);
     //the button to save img
+    /**
+    * @parameter
+    * @since
+    * @return
+    */
     private static JButton button;
     //declare the frame
+    /**
+    * @parameter
+    * @since
+    * @return
+    */
     private static JFrame frame;
     //declare the Image
+    /**
+     * @parameter
+     * @since
+     * @return
+     */
     private static BufferedImage  bufferImg;
-
-    private JGraphXAdapter<String, DefaultWeightedEdge> jgxAdapter;
+    /**
+     * @parameter
+     * @since
+     * @return
+     */
+    private static JGraphXAdapter<String, DefaultWeightedEdge> jgxAdapter;
 
     //initialize the frame and paint graph on it
-    public static void printGraph(final ArrayList<String> vertexList, final int[][] edges)
-    {
-
-    	GraphVisualization applet = new GraphVisualization();
+    /**
+    * @since
+    * @return
+    * @param vertexList comment here
+    * @param edges comment here
+    */
+    public static void printGraph(final ArrayList<String> vertexList,
+        final int[][] edges) {
+        GraphVisualization applet = new GraphVisualization();
         applet.init(vertexList, edges);
         applet.initButton();
 
@@ -56,68 +89,102 @@ public class GraphVisualization
         frame.setVisible(true);
 
         //create img
-        bufferImg = new BufferedImage(applet.getWidth(), applet.getHeight(), BufferedImage.TYPE_INT_ARGB);
-    	Graphics2D  save = bufferImg.createGraphics();
+        bufferImg = new BufferedImage(applet.getWidth(),
+            applet.getHeight(),
+            BufferedImage.TYPE_INT_ARGB);
+        Graphics2D  save = bufferImg.createGraphics();
 
-    	//add img to frame
+       //add img to frame
     	applet.paint(save);
     }
-    
+
     //initialize the button
-    public void initButton()
-    {
-        button = new JButton("淇濆瓨");
+    /**
+    * @parameter
+    * @since
+    * @return
+    */
+    
+    public static void setButton(String buttonText){
+        button = new JButton(buttonText);
+        
+    }
+    
+    public final void initButton() {
+    	setButton("淇濆瓨");
         button.addActionListener(this);
     }
 
     //璁剧疆filter 灏嗗浘鍍忎繚瀛�
-    public void actionPerformed(final ActionEvent e){	
+    /**
+    * @since
+    * @return
+    * @param e comment here
+    */
+    public final void actionPerformed(final ActionEvent e) {
         final JFileChooser chooser = new JFileChooser();
         final FileNameExtensionFilter filter = new FileNameExtensionFilter(
             "JPG & PNG Images", "jpg", "png");
         chooser.setFileFilter(filter);
         final int returnVal = chooser.showSaveDialog(null);
-        if(returnVal == JFileChooser.APPROVE_OPTION) {
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
         	try {
-    			ImageIO.write(bufferImg, "PNG", chooser.getSelectedFile());
+    			ImageIO.write(bufferImg, "PNG",
+    					chooser.getSelectedFile());
     		} catch (IOException e1) {
     			e1.printStackTrace();
     		}
         }
     }
-    
+
     //initialize the graph
-    public void init(final ArrayList<String> vertexList,final int[][] edges)
-    {
+    
+    public static void setjgxAdapter(ListenableDirectedWeightedGraph<String,
+        DefaultWeightedEdge> graph){
+    	jgxAdapter = new JGraphXAdapter<>(graph);
+    }
+    
+    /**
+    * @since
+    * @param vertexList comment here
+    * @param edges comment here
+    * @return
+    */
+    public final void init(final ArrayList<String> vertexList,
+        final int[][] edges) {
         // 鏂板缓涓�涓浘鐨勫璞�
-        final ListenableDirectedWeightedGraph<String, DefaultWeightedEdge> graph =
-            new ListenableDirectedWeightedGraph<String, DefaultWeightedEdge>(DefaultWeightedEdge.class);
-        
+        final ListenableDirectedWeightedGraph<String, DefaultWeightedEdge>
+        graph =
+            new ListenableDirectedWeightedGraph<String,
+            DefaultWeightedEdge>(DefaultWeightedEdge.class);
+
         // 缁欏浘鍔犱笂鑺傜偣
-        for(final String s: vertexList) 
-        {
+        for (final String s: vertexList) {
         	graph.addVertex(s);
         }
-        
+
         // 缁欏浘鍔犱笂杈�
-        for(int i = 0; i < vertexList.size(); i++){
-        	for(int j = 0; j < vertexList.size(); j++) {
-        		if(edges[i][j] != Integer.MAX_VALUE && edges[i][j] != 0) {
+        for (int i = 0; i < vertexList.size(); i++) {
+        	for (int j = 0; j < vertexList.size(); j++) {
+        		if (edges[i][j] != Integer.MAX_VALUE
+        				&& edges[i][j] != 0) {
         			final String vertex1 = vertexList.get(i);
         			final String vertex2 = vertexList.get(j);
         			graph.addEdge(vertex1, vertex2);
-        			graph.setEdgeWeight(graph.getEdge(vertex1, vertex2), edges[i][j]);
+        			graph.setEdgeWeight(
+        					graph.getEdge(vertex1, vertex2),
+        					edges[i][j]);
         		}
         	}
         }
-        
+
         // create a visualization using JGraph, via an adapter
-        jgxAdapter = new JGraphXAdapter<>(graph);
+        setjgxAdapter(graph);
 
         //灏嗗浘鍍忓姞杩涢潰鏉�
         getContentPane().add(new mxGraphComponent(jgxAdapter));
         resize(DEFAULT_SIZE);
-        
+
         // 鎶婃湁鍚戝浘杩炶捣鏉�
         final mxCircleLayout layout = new mxCircleLayout(jgxAdapter);
         layout.execute(jgxAdapter.getDefaultParent());
@@ -128,68 +195,71 @@ public class GraphVisualization
 
 
 //change the mxGraph to support directed graph
-class JGraphXAdapter<V, E> extends mxGraph implements GraphListener<V, E>
-{
+/**
+* @param<E> comment here
+* @param<V> comment here
+* @since
+* @return
+*/
+class JGraphXAdapter<V, E> extends mxGraph implements GraphListener<V, E> {
     /**
     * The graph to be drawn. Has vertices "V" and edges "E".
     */
-    private Graph<V, E> graphT;
+    private transient Graph<V, E> graphT;
 
     /**
-    * Maps the JGraphT-Vertices onto JGraphX-mxICells. 
+    * Maps the JGraphT-Vertices onto JGraphX-mxICells.
     * {@link #cellToVertexMap} is for the opposite
     * direction.
     */
-    final private HashMap<V, mxICell> vertexToCellMap = new HashMap<>();
+    private final HashMap<V, mxICell> vertexToCellMap = new HashMap<>();
 
     /**
-    * Maps the JGraphT-Edges onto JGraphX-mxICells. 
+    * Maps the JGraphT-Edges onto JGraphX-mxICells.
     * {@link #cellToEdgeMap} is for the opposite
     * direction.
     */
-    private HashMap<E, mxICell> edgeToCellMap = new HashMap<>();
+    private transient HashMap<E, mxICell> edgeToCellMap = new HashMap<>();
 
     /**
-    * Maps the JGraphX-mxICells onto JGraphT-Edges. 
+    * Maps the JGraphX-mxICells onto JGraphT-Edges.
     * {@link #edgeToCellMap} is for the opposite
     * direction.
     */
-    final private HashMap<mxICell, V> cellToVertexMap = new HashMap<>();
+    private final HashMap<mxICell, V> cellToVertexMap = new HashMap<>();
 
     /**
-    * Maps the JGraphX-mxICells onto JGraphT-Vertices. 
+    * Maps the JGraphX-mxICells onto JGraphT-Vertices.
     * {@link #vertexToCellMap} is for the opposite
     * direction.
     */
-    final private HashMap<mxICell, E> cellToEdgeMap = new HashMap<>();
+    private final HashMap<mxICell, E> cellToEdgeMap = new HashMap<>();
 
     /**
     * If the graph changes through as ListenableGraph,
-    * the JGraphXAdapter will automatically add/remove the 
+    * the JGraphXAdapter will automatically add/remove the
     * new edge/vertex as it implements the
-    * GraphListener interface. 
+    * GraphListener interface.
     * Throws a IllegalArgumentException if the graph is null.
     *  @param graph casted to graph
     */
 
-    public JGraphXAdapter(final ListenableGraph<V, E> graph)
-    {
+    JGraphXAdapter(final ListenableGraph<V, E> graph) {
         // call normal constructor with graph class
         this((Graph<V, E>) graph);
         graph.addGraphListener(this);
     }
 
     /**
-    * Constructs and draws a new mxGraph from a jGraphT graph. 
+    * Constructs and draws a new mxGraph from a jGraphT graph.
     * use the constructor with the ListenableGraph parameter
-    * instead or use this graph as a normal mxGraph. 
+    * instead or use this graph as a normal mxGraph.
     * Throws an IllegalArgumentException if the
     * parameter is null.
      *
     * @param graph is a graph
     */
-    public JGraphXAdapter(final Graph<V, E> graph)
-    {
+    JGraphXAdapter(final Graph<V, E> graph) {
         super();
 
         // Don't accept null as jgrapht graph
@@ -210,8 +280,7 @@ class JGraphXAdapter<V, E> extends mxGraph implements GraphListener<V, E>
     *
     * @return {@link #vertexToCellMap}
     */
-    public HashMap<V, mxICell> getVertexToCellMap()
-{
+    public HashMap<V, mxICell> getVertexToCellMap() {
     return vertexToCellMap;
 }
 
@@ -220,8 +289,7 @@ class JGraphXAdapter<V, E> extends mxGraph implements GraphListener<V, E>
     *
     * @return {@link #edgeToCellMap}
     */
-    public HashMap<E, mxICell> getEdgeToCellMap()
-{
+    public HashMap<E, mxICell> getEdgeToCellMap() {
     return edgeToCellMap;
 }
 
@@ -230,8 +298,7 @@ class JGraphXAdapter<V, E> extends mxGraph implements GraphListener<V, E>
     *
     * @return {@link #cellToEdgeMap}
     */
-    public HashMap<mxICell, E> getCellToEdgeMap()
-{
+    public HashMap<mxICell, E> getCellToEdgeMap() {
     return cellToEdgeMap;
 }
 
@@ -240,24 +307,21 @@ class JGraphXAdapter<V, E> extends mxGraph implements GraphListener<V, E>
     *
     * @return {@link #cellToVertexMap}
     */
-    public HashMap<mxICell, V> getCellToVertexMap()
-    {
+    public HashMap<mxICell, V> getCellToVertexMap() {
       return cellToVertexMap;
     }
 
     @Override
     //返回图的节点
-    public void vertexAdded(final GraphVertexChangeEvent<V> edge)
-    {
+    public void vertexAdded(final GraphVertexChangeEvent<V> edge) {
         addJGraphTVertex(edge.getVertex());
     }
 
     @Override
     //delete vertex i have comment here
-    public void vertexRemoved(final GraphVertexChangeEvent<V> e)
-    {
+    public void vertexRemoved(final GraphVertexChangeEvent<V> e) {
         final mxICell cell = vertexToCellMap.remove(e.getVertex());
-        removeCells(new Object[] { cell });
+        removeCells(new Object[] {cell });
 
         // remove vertex from hashmaps
         cellToVertexMap.remove(cell);
@@ -285,27 +349,24 @@ class JGraphXAdapter<V, E> extends mxGraph implements GraphListener<V, E>
 
 @Override
 	//add edges to graph
-    public void edgeAdded(final GraphEdgeChangeEvent<V, E> edge)
-    {
+    public void edgeAdded(final GraphEdgeChangeEvent<V, E> edge) {
         addJGraphTEdge(edge.getEdge());
-        System.out.println("changed!");
+        //System.out.println("changed!");
     }
 
 @Override
-    public void edgeRemoved(final GraphEdgeChangeEvent<V, E> edge)
-    {
+    public void edgeRemoved(final GraphEdgeChangeEvent<V, E> edge) {
         removeEdge(edge.getEdge());
     }
 
     /**
-    * Removes a jgrapht edge and its visual 
+    * Removes a jgrapht edge and its visual
     * representation from this graph completely.
     * @param edge The edge that will be removed
     */
-    private void removeEdge(final E edge)
-    {
+    private void removeEdge(final E edge) {
         final mxICell cell = edgeToCellMap.remove(edge);
-        removeCells(new Object[] { cell });
+        removeCells(new Object[] {cell });
 
         // remove edge from hashmaps
         cellToEdgeMap.remove(cell);
@@ -317,13 +378,13 @@ class JGraphXAdapter<V, E> extends mxGraph implements GraphListener<V, E>
     *
     * @param vertex vertex to be added to the graph
     */
-    private void addJGraphTVertex(final V vertex)
-    {
+    private void addJGraphTVertex(final V vertex) {
         getModel().beginUpdate();
 
         try {
             // create a new JGraphX vertex at position 0
-            final mxICell cell = (mxICell) insertVertex(defaultParent, null, vertex, 0, 0, 0, 0,
+            final mxICell cell = (mxICell) insertVertex(defaultParent,
+            		null, vertex, 0, 0, 0, 0,
                     "shape=ellipse;perimeter=ellipsePerimeter");
 
             // update cell size so cell isn't "above" graph
@@ -343,8 +404,7 @@ class JGraphXAdapter<V, E> extends mxGraph implements GraphListener<V, E>
  * @param edge edge to be added to the graph.
  *  Source and target vertices are needed.
  */
-    private void addJGraphTEdge(final E edge)
-    {
+    private void addJGraphTEdge(final E edge) {
         getModel().beginUpdate();
 
         try {
@@ -354,8 +414,7 @@ class JGraphXAdapter<V, E> extends mxGraph implements GraphListener<V, E>
 
             // if the one of the vertices is not drawn, don't draw the edge
             if (!(vertexToCellMap.containsKey(sourceVertex)
-                && vertexToCellMap.containsKey(targetVertex)))
-            {
+                && vertexToCellMap.containsKey(targetVertex))) {
                 return;
             }
 
@@ -364,7 +423,9 @@ class JGraphXAdapter<V, E> extends mxGraph implements GraphListener<V, E>
             final Object targetCell = vertexToCellMap.get(targetVertex);
 
             // add edge between mxICells
-            final mxICell cell = (mxICell) insertEdge(defaultParent, null, (int)graphT.getEdgeWeight(edge), sourceCell, targetCell);
+            final mxICell cell = (mxICell) insertEdge(defaultParent, null,
+            		(int) graphT.getEdgeWeight(edge),
+            		sourceCell, targetCell);
 
             // update cell size so cell isn't "above" graph
             updateCellSize(cell);
@@ -382,8 +443,7 @@ class JGraphXAdapter<V, E> extends mxGraph implements GraphListener<V, E>
     *
     * @param graph the graph to be added to the existing graph.
     */
-    private void insertJGraphT(final Graph<V, E> graph)
-    {
+    private void insertJGraphT(final Graph<V, E> graph) {
         for (final V vertex : graph.vertexSet()) {
             addJGraphTVertex(vertex);
         }
