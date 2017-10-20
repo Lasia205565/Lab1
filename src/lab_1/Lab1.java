@@ -416,6 +416,7 @@ public class Lab1 {
     static String queryBridgeWords(final String word1, final String word2) {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         PrintStream output = new PrintStream(bos);
+        StringBuilder ret = new StringBuilder();
         int v1 = graph.locateVertex(word1.toLowerCase());
         int v2 = graph.locateVertex(word2.toLowerCase());
         ArrayList<String> bridgeWords =
@@ -423,24 +424,24 @@ public class Lab1 {
 
         if (bridgeWords.isEmpty()) {
             if (v1 == -1 && v2 == -1) {
-                output.println("ERROR: No \"" + word1 + "\" and \""
-                        + word2 + "\" in the graph!");
+                ret.append("ERROR: No \"" + word1 + "\" and \""
+                        + word2 + "\" in the graph!\n");
             } else if (v1 == -1 && v2 != -1) {
-                output.println("ERROR: No \"" + word1 + "\" in the graph!");
+                ret.append("ERROR: No \"" + word1 + "\" in the graph!\n");
             } else if (v1 != -1 && v2 == -1) {
-                output.println("ERROR: No \"" + word2 + "\" in the graph!");
+                ret.append("ERROR: No \"" + word2 + "\" in the graph!\n");
             } else {
-                output.println("ERROR: No bridge words form \""
-                        + word1 + "\" to \"" + word2 + "\"!");
+                ret.append("ERROR: No bridge words form \"\n"
+                        + word1 + "\" to \"" + word2 + "\"!\n");
             }
         } else {
-            output.print("The bridge words from \"" + word1 + "\" to \""
+            ret.append("The bridge words from \"" + word1 + "\" to \""
                     + word2 + "\" is: " + bridgeWords.get(0));
             for (int i = 1; i < bridgeWords.size(); i++) {
-                output.print(", " + bridgeWords.get(i));
+                ret.append(", " + bridgeWords.get(i));
             }
         }
-        return (bos.toString());
+        return ret.toString() + bos.toString();
     }
     /**
      * generate new text.
