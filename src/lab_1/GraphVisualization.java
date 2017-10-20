@@ -115,7 +115,6 @@ public class GraphVisualization
         button.addActionListener(this);
     }
 
-    //璁剧疆filter 灏嗗浘鍍忎繚瀛�
     /**
     * @since
     * @return
@@ -151,19 +150,16 @@ public class GraphVisualization
     * @return
     */
     public final void init(final ArrayList<String> vertexList,
-        final int[][] edges) {
-        // 鏂板缓涓�涓浘鐨勫璞�
+        final int[][] edges) 
         final ListenableDirectedWeightedGraph<String, DefaultWeightedEdge>
         graph =
             new ListenableDirectedWeightedGraph<String,
             DefaultWeightedEdge>(DefaultWeightedEdge.class);
 
-        // 缁欏浘鍔犱笂鑺傜偣
         for (final String s: vertexList) {
         	graph.addVertex(s);
         }
 
-        // 缁欏浘鍔犱笂杈�
         for (int i = 0; i < vertexList.size(); i++) {
         	for (int j = 0; j < vertexList.size(); j++) {
         		if (edges[i][j] != Integer.MAX_VALUE
@@ -181,11 +177,8 @@ public class GraphVisualization
         // create a visualization using JGraph, via an adapter
         setjgxAdapter(graph);
 
-        //灏嗗浘鍍忓姞杩涢潰鏉�
         getContentPane().add(new mxGraphComponent(jgxAdapter));
         resize(DEFAULT_SIZE);
-
-        // 鎶婃湁鍚戝浘杩炶捣鏉�
         final mxCircleLayout layout = new mxCircleLayout(jgxAdapter);
         layout.execute(jgxAdapter.getDefaultParent());
 
