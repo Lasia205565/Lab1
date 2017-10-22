@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.*;
 
 /**
- * @author someone
+ * @author Lasia
  */
 public class Lab1 {
     /**

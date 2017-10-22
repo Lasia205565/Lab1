@@ -150,7 +150,7 @@ public class GraphVisualization
     * @return
     */
     public final void init(final ArrayList<String> vertexList,
-        final int[][] edges) 
+        final int[][] edges) {
         final ListenableDirectedWeightedGraph<String, DefaultWeightedEdge>
         graph =
             new ListenableDirectedWeightedGraph<String,
