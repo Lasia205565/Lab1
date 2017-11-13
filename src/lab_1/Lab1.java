@@ -451,10 +451,10 @@ public class Lab1 {
      * @param word2 word2
      * @return bridge words
      */
+
     public static String queryBridgeWords(final String word1, final String word2) {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         StringBuilder ret = new StringBuilder();
-    
         int v1 = graph.locateVertex(word1.toLowerCase());
         int v2 = graph.locateVertex(word2.toLowerCase());
         ArrayList<String> bridgeWords =
@@ -519,7 +519,7 @@ public class Lab1 {
      * @param word2 word1
      * @return path
      */
-    static String calcShortestPath(final String word1, final String word2) {
+    public static String calcShortestPath(final String word1, final String word2) {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         int v5 = graph.locateVertex(word1.toLowerCase());
         int v6 = graph.locateVertex(word2.toLowerCase());
@@ -614,6 +614,7 @@ public class Lab1 {
         ArrayList<String> nextWordsList;
         ArrayList<int[]> edgePairList = new ArrayList<int[]>(words.length);
         Random random = new Random();
+
 
         int s = random.nextInt(graph.getVertexSize()); // 随机选中第一个词
         String preWord = graph.getWord(s);
