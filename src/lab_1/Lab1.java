@@ -358,6 +358,44 @@ public class Lab1 {
         }
         sc.close();
     }
+    
+    public void init(String fileName) {
+         BufferedReader br;
+         try {
+             br = new BufferedReader(new FileReader(fileName));
+         } catch (FileNotFoundException e) {
+             System.out.println("ERROR: Can't access the file.");
+             System.out.println(e);
+             return;
+         }
+         String fileLine;
+         StringBuffer newText = new StringBuffer();
+         try {
+             while ((fileLine = br.readLine()) != null) {
+                 for (int i = 0; i < fileLine.length(); i++) {
+                     char c = fileLine.charAt(i);
+                     if (c >= 'A' && c <= 'Z') {
+                         char b = Character.toLowerCase(c);
+                         newText.append(b);
+                     }
+                     if ((c >= 'a' && c <= 'z') || c == ' ') {
+                         newText.append(c);
+                     } else if (c == ',' || c == '.'
+                             || c == '!' || c == '?') {
+                         newText.append(' ');
+                     }
+                 }
+                 newText.append(' ');
+             }
+             br.close();
+         } catch (IOException e) {
+             System.out.println("ERROR: Can't read the content.");
+             System.out.println(e);
+         }
+         words = newText.toString().trim().split("\\s+");
+         graph = new DirectedGraph(words);
+         graphReady = true; // Graph is gotten.
+    }
     /**
      * print menu.
      */
@@ -392,7 +430,7 @@ public class Lab1 {
      * @param word2 word1
      * @return bridge words
      */
-    static ArrayList<String>
+    public static ArrayList<String>
         findBridgeWords(final String word1, final String word2) {
         ArrayList<String> bridgeWords = new ArrayList<String>(words.length);
         int v3 = graph.locateVertex(word1.toLowerCase());
@@ -415,7 +453,6 @@ public class Lab1 {
      */
     static String queryBridgeWords(final String word1, final String word2) {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        PrintStream output = new PrintStream(bos);
         StringBuilder ret = new StringBuilder();
         int v1 = graph.locateVertex(word1.toLowerCase());
         int v2 = graph.locateVertex(word2.toLowerCase());
@@ -476,8 +513,9 @@ public class Lab1 {
      * @param word2 word1
      * @return path
      */
-    static String calcShortestPath(final String word1, final String word2) {
+    public static String calcShortestPath(final String word1, final String word2) {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        PrintStream output = new PrintStream(bos);
         int v5 = graph.locateVertex(word1.toLowerCase());
         int v6 = graph.locateVertex(word2.toLowerCase());
         if (v5 == -1 && v6 == -1) {
@@ -488,12 +526,31 @@ public class Lab1 {
         } else if (v5 != -1 && v6 == -1) {
             return ("ERROR: No \"" + word2 + "\" in the graph!");
         }
-        PrintStream output = new PrintStream(bos);
+        int[] distance = new int[graph.getVertexSize()];
+        int[] path = new int[graph.getVertexSize()];
+        shortestPath(path, distance, v5, v6);
+		output.print("from \"" + word1 + "\" to \"" + word2 + "\" : ");
+		StringBuffer line2 = new StringBuffer();
+		if (distance[v6] == Integer.MAX_VALUE) {
+			return ("from \"" + word1 + "\" to \"" + word2 + "\" : Unreachable");
+		} else {
+			line2.append(graph.getWord(v6));
+			int t = path[v6];
+			while (t != v5) {
+				line2.insert(0, graph.getWord(t) + " --> ");
+				t = path[t];
+			}
+			line2.insert(0, word1 + " --> ");
+		}
+		output.print(line2.toString());
+        return bos.toString();	
+
+    }
+    private static void shortestPath(int [] path,int[] distance, int v5, int v6) {
         int num = graph.getVertexSize();
         int mindis;
         int mindisIndex = v5;
-        int[] distance = new int[num];
-        int[] path = new int[num];
+
         boolean[] sign1 = new boolean[num];
         for (int i = 0; i < num; i++) {
             distance[i] = graph.getWeight(v5, i);
@@ -521,28 +578,9 @@ public class Lab1 {
                 }
             }
         }
-        for (int i = 0; i < num; i++) {
-            if (i == v6) {
-                output.print("from \"" + word1 + "\" to \"" + word2 + "\" : ");
-                StringBuffer line2 = new StringBuffer();
-                if (distance[i] == Integer.MAX_VALUE) {
-                    return ("from \"" + word1 + "\" to \"" + word2
-                            + "\" : Unreachable\n");
-                } else {
-                    line2.append(graph.getWord(i));
-                    int t = path[i];
-                    while (t != v5) {
-                        line2.insert(0, graph.getWord(t) + " --> ");
-                        t = path[t];
-                    }
-                    line2.insert(0, word1 + " --> ");
-                }
-                output.println(line2.toString());
-            }
-        }
-        return bos.toString();
-    }
-    /**
+	}
+
+	/**
      * calc..
      * @param word1 word1
      * @return path
