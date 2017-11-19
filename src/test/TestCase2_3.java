@@ -7,13 +7,21 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import lab_1.Lab1;
+import boundary.BridgeWord;
+import boundary.TargetFile;
+import entity.DirectedGraph;
+import lab1.Lab1;
 
 public class TestCase2_3 {
+	
+	DirectedGraph graph;
 
-    @Before
-    public void setUp() throws Exception {
-    }
+	@Before
+	public void setUp() throws Exception {
+    	TargetFile tf = new TargetFile();
+    	tf.execute("data");
+    	graph = tf.getGraph();
+	}
 
     @After
     public void tearDown() throws Exception {
@@ -21,9 +29,8 @@ public class TestCase2_3 {
  
     @Test
     public void testQueryBridgeWords() {
-        Lab1 lab1 = new Lab1();
-        lab1.init("data");
-        assertEquals("ERROR: No words found.Check the input.",Lab1.queryBridgeWords("",""));
+    	BridgeWord bw = new BridgeWord(graph);
+        assertEquals("ERROR: No words found.Check the input.",bw.queryBridgeWords("",""));
     }
 
 }
