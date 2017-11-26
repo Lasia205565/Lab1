@@ -26,28 +26,28 @@ public class Lab1 {
             choice = sc.nextLine().charAt(0);
             switch (choice) {
             case '1':
-            	TargetFile tf = new TargetFile();
+            	OpenTextInterface tf = new OpenTextInterface();
             	tf.execute();
             	graph = tf.getGraph();
                 break;
             case '2':
-            	ShowGraph sg = new ShowGraph(graph);
+                ShowGraphInterface sg = new ShowGraphInterface(graph);
             	sg.execute();
                 break;
             case '3':
-            	BridgeWord bw = new BridgeWord(graph);
+                BridgeWordInterface bw = new BridgeWordInterface(graph);
             	bw.execute();
                 break;
             case '4':
-            	NewText nt = new NewText(graph);
+                NewTextInterface nt = new NewTextInterface(graph);
             	nt.execute();
                 break;
             case '5':
-            	ShortestPath sp = new ShortestPath(graph);
+                ShortesPathInterface sp = new ShortesPathInterface(graph);
             	sp.execute();
             	break;
             case '6':
-            	RandomWalk rw = new RandomWalk(graph);
+                RandomWalkInterface rw = new RandomWalkInterface(graph);
             	rw.execute();
                 break;
             case '0':

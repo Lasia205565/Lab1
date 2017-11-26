@@ -2,21 +2,21 @@ package boundary;
 
 import java.util.Scanner;
 
-import control.DisplayControl;
 import entity.DirectedGraph;
 
-public class ShowGraph {
+public class ShowGraphInterface {
 	
 	DirectedGraph graph;
 
-	public ShowGraph(DirectedGraph graph) {
+	public ShowGraphInterface(DirectedGraph graph) {
 		super();
 		this.graph = graph;
 	}
 
 
 	public void execute() {
-		Scanner sc = new Scanner(System.in);
+		@SuppressWarnings("resource")
+        Scanner sc = new Scanner(System.in);
         if (graph == null) {
             System.out.println("ERROR: Please open a file first.");
             return;
@@ -25,11 +25,10 @@ public class ShowGraph {
                 + "the Text view? (g or t) ");
         String way = sc.nextLine();
 		
-		DisplayControl dc = new DisplayControl();
         if (way.equals("t")) {
-            dc.showGraph(graph, 0);
+            System.out.println(graph.toString());
         } else {
-            dc.showGraph(graph, 1);
+            graph.printGraph();
         }
 	}
 

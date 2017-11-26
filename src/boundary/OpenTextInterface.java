@@ -5,11 +5,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
 
-import control.GraphControl;
 import entity.DirectedGraph;
-import entity.TargetText;
+import entity.Text;
 
-public class TargetFile {
+public class OpenTextInterface {
 	DirectedGraph graph;
 
 	public DirectedGraph getGraph() {
@@ -17,14 +16,15 @@ public class TargetFile {
 	}
 
 	public void execute() {
-		Scanner sc = new Scanner(System.in);
+		@SuppressWarnings("resource")
+        Scanner sc = new Scanner(System.in);
 		System.out.print("Select and open the file: ");
 		String fileName = sc.nextLine();
 		execute(fileName);
 	}
 	
 	public void execute(String fileName) {
-		TargetText words = new TargetText();
+		Text words = new Text();
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(fileName));
 			System.out.print("OK: The target file is found.\n> > ");
@@ -40,8 +40,7 @@ public class TargetFile {
 			System.out.println("ERROR: Can't read the content.");
 			System.out.println(e);
 		}
-		GraphControl gc = new GraphControl(words);
-		gc.execute();
-		graph = gc.getGraph();
+		words.setupWords();
+        graph = new DirectedGraph(words.getWords());
 	}
 }

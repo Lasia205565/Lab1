@@ -1,6 +1,6 @@
 package entity;
 
-public class TargetText {
+public class Text {
 
 	private String text;
 

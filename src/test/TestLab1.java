@@ -7,7 +7,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import boundary.TargetFile;
+import boundary.OpenTextInterface;
 import entity.DirectedGraph;
 
 public class TestLab1 {
@@ -15,7 +15,7 @@ public class TestLab1 {
 	DirectedGraph graph;
 	@Before
 	public void setUp() throws Exception {
-    	TargetFile tf = new TargetFile();
+	    OpenTextInterface tf = new OpenTextInterface();
     	tf.execute("data");
     	graph = tf.getGraph();
 	}

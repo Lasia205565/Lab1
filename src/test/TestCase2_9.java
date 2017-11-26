@@ -7,17 +7,16 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import boundary.BridgeWord;
-import boundary.TargetFile;
+import boundary.OpenTextInterface;
+import control.BridgeWordControl;
 import entity.DirectedGraph;
-import lab1.Lab1;
 
 public class TestCase2_9 {
 
 	DirectedGraph graph;
 	@Before
 	public void setUp() throws Exception {
-    	TargetFile tf = new TargetFile();
+	    OpenTextInterface tf = new OpenTextInterface();
     	tf.execute("data");
     	graph = tf.getGraph();
 	}
@@ -28,8 +27,8 @@ public class TestCase2_9 {
  
     @Test
     public void testQueryBridgeWords() {
-    	BridgeWord bw = new BridgeWord(graph);
-        assertEquals("ERROR: No bridge words from \"make\" to \"something\"!",bw.queryBridgeWords("make","something"));
+        BridgeWordControl bc = new BridgeWordControl(graph);
+        assertEquals("ERROR: No bridge words from \"make\" to \"something\"!",bc.queryBridgeWords("make","something"));
     }
 
 }

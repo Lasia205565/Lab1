@@ -7,17 +7,16 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import boundary.BridgeWord;
-import boundary.TargetFile;
+import boundary.OpenTextInterface;
+import control.BridgeWordControl;
 import entity.DirectedGraph;
-import lab1.Lab1;
 
 public class TestCase2_1 {
 
 	DirectedGraph graph;
 	@Before
 	public void setUp() throws Exception {
-    	TargetFile tf = new TargetFile();
+    	OpenTextInterface tf = new OpenTextInterface();
     	tf.execute("data");
     	graph = tf.getGraph();
 	}
@@ -28,8 +27,8 @@ public class TestCase2_1 {
  
     @Test
     public void testQueryBridgeWords() {
-    	BridgeWord bw = new BridgeWord(graph);
-        assertEquals("The bridge words from \"show\" to \"how\" is: you",bw.queryBridgeWords("show","how"));
+        BridgeWordControl bc = new BridgeWordControl(graph);
+        assertEquals("The bridge words from \"show\" to \"how\" is: you",bc.queryBridgeWords("show","how"));
     }
 
 }
